@@ -11,7 +11,7 @@ const Container = styled.div`
     justify-content: space-between;
     padding: 0 20px;
     background-color: white;
-    box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     position: fixed;
     top: 0;
     left: 0;
@@ -84,16 +84,16 @@ export default function NavigationBar() {
             <Logo onClick={() => navigate("/")}>DevConf</Logo>
             <MenuContainer>
                 <MenuButton isActive={location.pathname === "/"} onClick={() => navigate("/")}>
-                    <div>메인화면</div>
+                    <div>메인 화면</div>
                 </MenuButton>
-                <MenuButton isActive={location.pathname === "/conference"}>
+                <MenuButton isActive={location.pathname === "/conference"} onClick={() => navigate("/conference")}>
                     <div>컨퍼런스 일정</div>
                 </MenuButton> 
                 <MenuButton isActive={location.pathname === "/dev-board"} onClick={() => navigate("/dev-board")}>
                     <div>게시판</div>
                 </MenuButton>
-                <MenuButton isActive={location.pathname === "/mypage"}>
-                    <div>마이페이지</div>
+                <MenuButton isActive={location.pathname === "/mypage"} onClick={() => navigate("/mypage")}>
+                    <div>마이 페이지</div>
                 </MenuButton>
             </MenuContainer>
             <LoginButton>로그인</LoginButton>
