@@ -110,7 +110,7 @@ const PaginationWrapper = styled.div`
   transform: translateX(-50%);
   background-color: white;
   padding: 15px;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
   border-radius: 20px;
 
 `;
@@ -139,6 +139,7 @@ export default function DevBoard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const postsPerPage = 7;
   
+  // 더미 데이터(나중에 API 연동으로 대체)
   const posts = [
     { id: 1, title: "1 번째 게시글", name: "가나다", date: "2024-01-01" },
     { id: 2, title: "2 번째 게시글", name: "라마바", date: "2024-01-02" },
