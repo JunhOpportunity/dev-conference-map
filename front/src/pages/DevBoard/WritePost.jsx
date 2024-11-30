@@ -39,7 +39,14 @@ const Input = styled.input`
   border-radius: 15px;
   font-size: 16px;
   background-color: ${COLORS.bg};
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  &:focus {
+    outline: none;
+    border-color: ${COLORS.sig};
+  }
 `;
+
 const TextArea = styled.textarea`
   width: 96%;
   height: 400px;
@@ -50,6 +57,12 @@ const TextArea = styled.textarea`
   font-size: 16px;
   resize: vertical;
   background-color: ${COLORS.bg};
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  &:focus {
+    outline: none;
+    border-color: ${COLORS.sig};
+  }
 `;
 
 const ButtonContainer = styled.div`
