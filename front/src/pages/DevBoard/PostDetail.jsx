@@ -5,10 +5,12 @@ import { COLORS } from "../../constants/colors";
 import NavigationBar from "../../components/layout/NavigationBar";  // 추가
 
 const MainContainer = styled.div`
-  border: 3px solid ${COLORS.bg};
+  border: 1px solid ${COLORS.bg};
   border-radius: 20px;
   margin: 100px auto;
   max-width: 1200px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
 `;
 
 const DetailContainer = styled.div`
@@ -33,9 +35,10 @@ const PostInfo = styled.div`
 const Content = styled.div`
   margin-top: 10px;
   line-height: 1.6;
-  border: 3px solid ${COLORS.bg};
+  border: 1px solid ${COLORS.bg};
   border-radius:20px;
-  padding: 0 0 300px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  min-height: 300px;
 
   div {
     padding: 10px;
@@ -75,12 +78,18 @@ const CommentForm = styled.form`
 const CommentInput = styled.textarea`
   width: 97.7%;
   padding: 10px;
-  border: 2px solid ${COLORS.bg};
+  border: 1px solid ${COLORS.bg};
   border-radius: 10px;
   margin-bottom: 10px;
   resize: vertical;
   min-height: 80px;
   background-color: ${COLORS.bg};
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  &:focus {
+    outline: none;
+    border-color: ${COLORS.sig};
+  }
 `;
 
 const CommentButton = styled.button`
@@ -88,9 +97,14 @@ const CommentButton = styled.button`
   background-color: ${COLORS.sig};
   color: white;
   border: none;
-  border-radius: 10px;
+  border-radius: 20px;
   cursor: pointer;
   float: right;
+
+  &:hover {
+    transform: scale(1.05);
+    transition: all 0.2s;
+  }
 `;
 
 const CommentList = styled.div`
@@ -126,7 +140,7 @@ export default function PostDetail() {
   const post = {
     id: postId,
     title: "게시글 제목",
-    content: "게시글 내용",
+    content: "게시글 내용👍",
     name: "작성자",
     date: "2024-01-15"
   };
