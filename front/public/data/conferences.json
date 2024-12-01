@@ -5,6 +5,7 @@
       "title": "우아한형제들 기술이사 김민태의 데브캠프",
       "category": ["온라인", "유료", "프론트엔드"],
       "organizer": "패스트캠퍼스",
+      "location": "서울특별시 강남구 영동대로 513",
       "registration_period": {
         "start_date": "2024-10-23",
         "end_date": "2024-12-01"
@@ -14,9 +15,10 @@
     },
     {
       "id": 2,
-      "title": "Next.js 실전 컨퍼런스",
+      "title": "경기도 판교 Next.js 실전 컨퍼런스",
       "category": ["오프라인", "유료", "풀스택"],
       "organizer": "Next Academy",
+      "location": "경기도 판교",
       "registration_period": {
         "start_date": "2024-11-15",
         "end_date": "2024-12-10"
@@ -26,9 +28,10 @@
     },
     {
       "id": 3,
-      "title": "우아한형제들 기술이사 김민태의 데브캠프",
+      "title": "인천 송도 우아한형제들 기술이사 김민태의 데브캠프",
       "category": ["온라인", "유료", "프론트엔드"],
       "organizer": "패스트캠퍼스",
+      "location": "인천 송도",
       "registration_period": {
         "start_date": "2024-10-23",
         "end_date": "2024-12-01"
@@ -38,9 +41,10 @@
     },
     {
       "id": 4,
-      "title": "Next.js 실전 컨퍼런스",
+      "title": "서울 역삼 Next.js 실전 컨퍼런스",
       "category": ["오프라인", "유료", "풀스택"],
       "organizer": "Next Academy",
+      "location": "서울 역삼",
       "registration_period": {
         "start_date": "2024-11-15",
         "end_date": "2024-12-10"
@@ -50,9 +54,10 @@
     },
     {
       "id": 5,
-      "title": "우아한형제들 기술이사 김민태의 데브캠프",
+      "title": "코엑스 우아한형제들 기술이사 김민태의 데브캠프",
       "category": ["온라인", "유료", "프론트엔드"],
       "organizer": "패스트캠퍼스",
+      "location": "코엑스",
       "registration_period": {
         "start_date": "2024-10-23",
         "end_date": "2024-12-01"
@@ -62,9 +67,23 @@
     },
     {
       "id": 6,
-      "title": "Next.js 실전 컨퍼런스",
+      "title": "서울 강남 Next.js 실전 컨퍼런스",
       "category": ["오프라인", "유료", "풀스택"],
       "organizer": "Next Academy",
+      "location": "서울 강남",
+      "registration_period": {
+        "start_date": "2024-11-15",
+        "end_date": "2024-12-10"
+      },
+      "description": "Next.js 기반의 풀스택 개발을 실전에서 활용하기 위한 노하우를 공유하는 컨퍼런스.",
+      "website": "https://nextacademy.io/conference"
+    },
+    {
+      "id": 7,
+      "title": "경기 성남 Next.js 실전 컨퍼런스",
+      "category": ["오프라인", "유료", "풀스택"],
+      "organizer": "Next Academy",
+      "location": "경기 성남",
       "registration_period": {
         "start_date": "2024-11-15",
         "end_date": "2024-12-10"
