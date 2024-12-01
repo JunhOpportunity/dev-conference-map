@@ -86,7 +86,7 @@ export default function NavigationBar() {
                 <MenuButton isActive={location.pathname === "/"} onClick={() => navigate("/")}>
                     <div>메인 화면</div>
                 </MenuButton>
-                <MenuButton isActive={location.pathname === "/conference"} onClick={() => navigate("/conference")}>
+                <MenuButton isActive={location.pathname === "/dev-conf"} onClick={() => navigate("/dev-conf")}>
                     <div>컨퍼런스 일정</div>
                 </MenuButton> 
                 <MenuButton isActive={location.pathname === "/dev-board"} onClick={() => navigate("/dev-board")}>
