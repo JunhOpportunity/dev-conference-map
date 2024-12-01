@@ -6,6 +6,7 @@ import ConferenceModal from "./ConferenceModal";
 const AppContainer = styled.div`
   text-align: center;
   padding: 20px;
+  margin-top: 100px;
 `;
 
 const Title = styled.h1`

@@ -94,6 +94,7 @@ export default function Home() {
 const AppContainer = styled.div`
   text-align: center;
   padding: 20px;
+  margin-top: 100px;
 `;
 
 const Header = styled.header`
