@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { COLORS } from "../../constants/colors";
 import WritePost from "./WritePost";
 import { useNavigate } from "react-router-dom";
-import NavigationBar from "../../components/layout/NavigationBar"; 
+
 
 const BoardContainer = styled.div`
   display: flex;
@@ -190,7 +190,6 @@ export default function DevBoard() {
 
   return (
     <>
-      <NavigationBar />
       <BoardContainer>
         <h1>게시판</h1>
         <PostsWrapper>

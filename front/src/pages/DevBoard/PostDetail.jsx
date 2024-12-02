@@ -2,7 +2,7 @@ import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { COLORS } from "../../constants/colors";
-import NavigationBar from "../../components/layout/NavigationBar";  // 추가
+
 
 const MainContainer = styled.div`
   border: 1px solid ${COLORS.bg};
@@ -29,7 +29,7 @@ const Title = styled.h1`
 
 const PostInfo = styled.div`
   color: gray;
-  font-size: 0.9rem;
+  font-size: 15px;
 `;
 
 const Content = styled.div`
@@ -38,7 +38,7 @@ const Content = styled.div`
   border: 1px solid ${COLORS.bg};
   border-radius:20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  min-height: 300px;
+  min-height: 330px;
 
   div {
     padding: 10px;
@@ -64,6 +64,7 @@ const CommentSection = styled.div`
   margin-top: 30px;
   h3 {
   color: ${COLORS.sig};
+  font-size: 22px;
   }
 `;
 
@@ -85,6 +86,8 @@ const CommentInput = styled.textarea`
   min-height: 80px;
   background-color: ${COLORS.bg};
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
+  
 
   &:focus {
     outline: none;
@@ -126,7 +129,7 @@ const CommentItem = styled.div`
 `;
 
 const CommentInfo = styled.div`
-  font-size: 0.9rem;
+  font-size: 15px;
   color: gray;
   margin-bottom: 5px;
   color: ${COLORS.sig};
@@ -163,7 +166,6 @@ export default function PostDetail() {
 
   return (
     <>
-      <NavigationBar />
       <MainContainer>
         <DetailContainer>
           <BackButton onClick={() => navigate('/dev-board')}>← 목록으로</BackButton>
