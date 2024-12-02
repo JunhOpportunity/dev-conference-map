@@ -23,7 +23,9 @@ const ModalContent = styled.div`
   height: 70%;
   max-width: 700px;
   max-height: 700px;
-
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 `;
 
 const Title = styled.h2`
@@ -49,13 +51,13 @@ const Input = styled.input`
 
 const TextArea = styled.textarea`
   width: 96%;
-  height: 400px;
+  height: calc(100% - 150px); 
   padding: 12px;
   margin-bottom: 20px;
   border: 1px solid #ddd;
   border-radius: 15px;
   font-size: 16px;
-  resize: vertical;
+  resize: none; 
   background-color: ${COLORS.bg};
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
 
