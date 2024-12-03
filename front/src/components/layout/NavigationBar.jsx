@@ -18,6 +18,14 @@ const Container = styled.div`
     z-index: 1000;
 `;
 
+const ContainerElements = styled.div`
+width: 100%;
+max-width: 1200px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+margin: 0 auto;
+`;
 const Logo = styled.div`
     font-size: 24px;
     font-weight: bold;
@@ -81,6 +89,7 @@ export default function NavigationBar() {
     //클릭 시 어디로 갈지 url 지정. 컨퍼런스 페이지와 마이페이지 페이지 추가해야함.
     return (
         <Container>
+            <ContainerElements>
             <Logo onClick={() => navigate("/")}>DevConf</Logo>
             <MenuContainer>
                 <MenuButton isActive={location.pathname === "/"} onClick={() => navigate("/")}>
@@ -97,6 +106,7 @@ export default function NavigationBar() {
                 </MenuButton>
             </MenuContainer>
             <LoginButton>로그인</LoginButton>
+            </ContainerElements>
         </Container>
     )
 }

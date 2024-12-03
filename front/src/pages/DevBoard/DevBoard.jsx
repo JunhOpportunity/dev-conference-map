@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { COLORS } from "../../constants/colors";
 import WritePost from "./WritePost";
 import { useNavigate } from "react-router-dom";
-import NavigationBar from "../../components/layout/NavigationBar"; 
+
 
 const BoardContainer = styled.div`
   display: flex;
@@ -29,12 +29,13 @@ const PostsWrapper = styled.div`
 const PostItem = styled.div`
   padding: 20px;
   margin: 10px 0;
-  border: 1px solid #ddd;
+  border: 0.5px solid #ddd;
   border-radius: 20px;
   width: 100%;
   cursor: pointer;
   transition: all 0.4s ease;
   overflow: hidden;
+  box-shadow: 0 4px 8px rgba(93, 90, 136, 0.1);
 
   &:hover {
     background-color: ${COLORS.bg};
@@ -110,7 +111,7 @@ const PaginationWrapper = styled.div`
   transform: translateX(-50%);
   background-color: white;
   padding: 15px;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 -1px 10px rgba(0, 0, 0, 0.2);
   border-radius: 20px;
 
 `;
@@ -189,7 +190,6 @@ export default function DevBoard() {
 
   return (
     <>
-      <NavigationBar />
       <BoardContainer>
         <h1>게시판</h1>
         <PostsWrapper>
