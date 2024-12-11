@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { COLORS } from "../../constants/colors";
@@ -138,31 +138,64 @@ const CommentInfo = styled.div`
 export default function PostDetail() {
   const { postId } = useParams();
   const navigate = useNavigate();
+  const [post, setPost] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [commentInput, setCommentInput] = useState('');
 
-  // 더미 데이터 (나중에 API로 대체...json 데이터)
-  const post = {
-    id: postId,
-    title: "게시글 제목",
-    content: "게시글 내용👍",
-    name: "작성자",
-    date: "2024-01-15"
-  };
+  useEffect(() => {
+    const fetchPost = async () => {
+      try {
+        const response = await fetch('/data/posts.json');
+        const data = await response.json();
+        const foundPost = data.find(p => p.id === parseInt(postId));
+        setPost(foundPost);
+      } catch (error) {
+        console.error('게시글 불러오는 데 실패했습니다. ', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  // 더미 댓글 데이터
-  const comments = [
-    { id: 1, name: "홍길동", content: "좋은 글이네요!", date: "2024-01-16" },
-    { id: 2, name: "김철수", content: "감사합니다.", date: "2024-01-16" },
-    { id: 2, name: "김철수", content: "감사합니다.", date: "2024-01-16" },
-    { id: 2, name: "김철수", content: "감사합니다.", date: "2024-01-16" },
-    { id: 2, name: "김철수", content: "감사합니다.", date: "2024-01-16" },
-    { id: 2, name: "김철수", content: "감사합니다.", date: "2024-01-16" },
-    { id: 2, name: "김철수", content: "감사합니다.", date: "2024-01-16" },
-  ];
+    fetchPost();
+  }, [postId]);
 
-  const handleCommentSubmit = (e) => {
+  const handleCommentSubmit = async (e) => {
     e.preventDefault();
-    // 댓글 제출 로직 구현 예정
+    if (!commentInput.trim()) return;
+
+    const newComment = {
+      name: "currentUser", // 실제 사용시 로그인된 사용자 정보 사용
+      nameId: Date.now(), // 임시 ID 생성
+      date: new Date().toISOString().slice(0, 16).replace('T', ' '),
+      content: commentInput
+    };
+
+    try {
+      const response = await fetch('/data/posts.json', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          postId: parseInt(postId),
+          comment: newComment
+        }),
+      });
+
+      if (response.ok) {
+        setPost({
+          ...post,
+          comments: [...post.comments, newComment]
+        });
+        setCommentInput('');
+      }
+    } catch (error) {
+      console.error('댓글 등록 실패:', error);
+    }
   };
+
+  if (loading) return <div>Loading...</div>;
+  if (!post) return <div>Post not found</div>;
 
   return (
     <>
@@ -183,14 +216,18 @@ export default function PostDetail() {
             <h3>댓글</h3>
             <CommentInputSection>
             <CommentForm onSubmit={handleCommentSubmit}>
-              <CommentInput placeholder="댓글을 입력하세요" />
+              <CommentInput 
+                placeholder="댓글을 입력하세요"
+                value={commentInput}
+                onChange={(e) => setCommentInput(e.target.value)}
+              />
               <CommentButton type="submit">등록</CommentButton>
             </CommentForm>
             </CommentInputSection>
             
             <CommentList>
-              {comments.map((comment) => (
-                <CommentItem key={comment.id}>
+              {post.comments.map((comment) => (
+                <CommentItem key={comment.nameId}>
                   <CommentInfo>
                     {comment.name} | {comment.date}
                   </CommentInfo>
