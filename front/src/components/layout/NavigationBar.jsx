@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import {COLORS} from "../../constants/colors";
 import {useNavigate, useLocation} from "react-router-dom";
@@ -82,11 +82,27 @@ const LoginButton = styled.div`
     }
 `;
 
+const LogoutButton = styled(LoginButton)`
+    background-color: white;
+    color: ${COLORS.sig};
+    
+    &:hover {
+        background-color: ${COLORS.sig};
+        color: white;
+    }
+`;
+
 export default function NavigationBar() {
     const navigate = useNavigate();
     const location = useLocation();
-    
-    //클릭 시 어디로 갈지 url 지정. 컨퍼런스 페이지와 마이페이지 페이지 추가해야함.
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    const handleLogout = () => {
+        setIsLoggedIn(false);
+        // TODO: 로그아웃 처리 로직 추가
+        navigate('/');
+    };
+
     return (
         <Container>
             <ContainerElements>
@@ -105,7 +121,11 @@ export default function NavigationBar() {
                     <div>마이 페이지</div>
                 </MenuButton>
             </MenuContainer>
-            <LoginButton>로그인</LoginButton>
+            {isLoggedIn ? (
+                <LogoutButton onClick={handleLogout}>로그아웃</LogoutButton>
+            ) : (
+                <LoginButton onClick={() => navigate("/login")}>로그인</LoginButton>
+            )}
             </ContainerElements>
         </Container>
     )
