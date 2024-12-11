@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { COLORS } from "../../constants/colors";
 import WritePost from "./WritePost";
@@ -136,34 +136,24 @@ const PageButton = styled.button`
 export default function DevBoard() {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
-  const [sortOrder, setSortOrder] = useState('desc'); 
+  const [sortOrder, setSortOrder] = useState('desc');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [posts, setPosts] = useState([]);
   const postsPerPage = 7;
   
-  // 더미 데이터(나중에 API 연동으로 대체)
-  const posts = [
-    { id: 1, title: "1 번째 게시글", name: "가나다", date: "2024-01-01" },
-    { id: 2, title: "2 번째 게시글", name: "라마바", date: "2024-01-02" },
-    { id: 3, title: "3 번째 게시글", name: "사아자", date: "2024-01-03" },
-    { id: 4, title: "4 번째 게시글", name: "차카타", date: "2024-01-04" },
-    { id: 5, title: "5 번째 게시글", name: "파하파", date: "2024-01-05" },
-    { id: 6, title: "6 번째 게시글", name: "홍길동", date: "2024-01-06" },
-    { id: 7, title: "7 번째 게시글🥲", name: "김철수", date: "2024-01-07" },
-    { id: 8, title: "8 번째 게시글", name: "가나다", date: "2024-01-08" },
-    { id: 9, title: "9 번째 게시글", name: "라마바", date: "2024-01-09" },
-    { id: 10, title: "10 번째 게시글", name: "사아자", date: "2024-01-10" },
-    { id: 11, title: "11 번째 게시글", name: "차카타", date: "2024-01-11" },
-    { id: 12, title: "12 번째 게시글", name: "파하파", date: "2024-01-12" },
-    { id: 13, title: "13 번째 게시글", name: "홍길동", date: "2024-01-13" },
-    { id: 14, title: "14 번째 게시글🥲", name: "김철수", date: "2024-01-14" },
-    { id: 15, title: "15 번째 게시글", name: "가나다", date: "2024-01-15" },
-    { id: 16, title: "16 번째 게시글", name: "라마바", date: "2024-01-16" },
-    { id: 17, title: "17 번째 게시글", name: "사아자", date: "2024-01-17" },
-    { id: 18, title: "18 번째 게시글", name: "차카타", date: "2024-01-18" },
-    { id: 19, title: "19 번째 게시글", name: "파하파", date: "2024-01-19" },
-    { id: 20, title: "20 번째 게시글", name: "홍길동", date: "2024-01-20" },
-    { id: 21, title: "21 번째 게시글🥲", name: "김철수", date: "2024-01-21" },
-  ];
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await fetch('/data/posts.json');
+        const data = await response.json();
+        setPosts(data);
+      } catch (error) {
+        console.error('게시글을 불러오는데 실패했습니다:', error);
+      }
+    };
+
+    fetchPosts();
+  }, []);
 
   // 정렬된 게시글 목록 생성
   const sortedPosts = [...posts].sort((a, b) => {
@@ -201,7 +191,7 @@ export default function DevBoard() {
             <PostItem key={post.id} onClick={() => handlePostClick(post.id)}>
               <PostContent>
                 <PostTitle>{post.title}</PostTitle>
-                <PostInfo>작성자: {post.name} | 작성일: {post.date}</PostInfo>
+                <PostInfo> {post.name} | {post.date}</PostInfo>
               </PostContent>
             </PostItem>
           ))}
