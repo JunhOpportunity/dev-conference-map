@@ -103,7 +103,6 @@ export default function ConferenceCard({ conference, onClick }) {
         ))}
       </Tags>
       <LearnMore href="#">Learn more →</LearnMore>
-      <StarIcon>★</StarIcon>
     </Card>
   );
 };
