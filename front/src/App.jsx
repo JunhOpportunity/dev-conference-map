@@ -7,6 +7,8 @@ import PostDetail from './pages/DevBoard/PostDetail';
 import DevConf from './pages/DevConf/DevConf';
 import NavigationBar from './components/layout/NavigationBar';
 import MyPage from './pages/Mypage/Mypage';
+import SignIn from './pages/Login/Signin';
+import SignUp from './pages/Login/SignUp';
 
 
 function App() {
@@ -19,6 +21,8 @@ function App() {
         <Route path="/dev-board/:postId" element={<PostDetail />} />
         <Route path="/dev-conf" element={<DevConf />} />
         <Route path="/mypage" element={<MyPage />} />
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/signup" element={<SignUp />} />
       </Routes>
     </Router>
   )
