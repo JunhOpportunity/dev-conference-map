@@ -106,10 +106,34 @@ export default function WritePost({ onClose }) {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
 
-  const handleSubmit = () => {
-    // TODO: 게시글 등록 로직 구현
-    console.log({ title, content });
-    onClose();
+  const handleSubmit = async () => {
+    const newPost = {
+      id: Date.now(), // 임시 ID 생성
+      title: title,
+      name: "Anonymous", // 임시 사용자 이름
+      date: new Date().toISOString().slice(0, 16).replace('T', ' '),
+      content: content,
+      likes: 0,
+      comments: []
+    };
+
+    try {
+      const response = await fetch('/data/posts.json', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newPost)
+      });
+
+      if (!response.ok) {
+        throw new Error('게시글 등록에 실패했습니다.');
+      }
+      onClose();
+    } catch (error) {
+      console.error('Error:', error);
+      alert('게시글 등록에 실패했습니다.');
+    }
   };
 
   return (
