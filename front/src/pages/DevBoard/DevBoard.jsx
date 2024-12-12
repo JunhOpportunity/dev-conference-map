@@ -43,6 +43,30 @@ const PostItem = styled.div`
     transform: scale(1.03);
     box-shadow: 0 8px 16px rgba(93, 90, 136, 0.2);
     margin: 5px 0;
+    font-size: 0px;
+  }
+
+  .post-preview {
+    height: 0;
+    opacity: 0;
+    transition: all 0.4s ease;
+    color: #666;
+    font-size: 0px;
+    margin-top: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  &:hover .post-preview {
+    height: auto;
+    opacity: 1;
+    margin-top: 15px;
+    font-size: 18px;
+    max-height: 50%;
+    max-width: 90%;
   }
 `;
 
@@ -96,9 +120,24 @@ const PostTitle = styled.h3`
   color: ${COLORS.sig};
 `;
 
+const HeartIcon = styled.span`
+  color: ${COLORS.sig};
+  font-size: 1.1em;
+`;
+
 const PostInfo = styled.p`
   margin: 0;
   color: ${COLORS.sig};
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  .likes {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    font-weight: bold;
+  }
 `;
 
 const PaginationWrapper = styled.div`
@@ -191,7 +230,17 @@ export default function DevBoard() {
             <PostItem key={post.id} onClick={() => handlePostClick(post.id)}>
               <PostContent>
                 <PostTitle>{post.title}</PostTitle>
-                <PostInfo> {post.name} | {post.date}</PostInfo>
+                <div className="post-preview">
+                  {post.content.length > 100 
+                    ? `${post.content.substring(0, 100)}...` 
+                    : post.content}
+                </div>
+                <PostInfo>
+                  <span>{post.name} | {post.date}</span>
+                  <span className="likes">
+                    <HeartIcon>♥</HeartIcon> {post.likes || 0}
+                  </span>
+                </PostInfo>
               </PostContent>
             </PostItem>
           ))}
