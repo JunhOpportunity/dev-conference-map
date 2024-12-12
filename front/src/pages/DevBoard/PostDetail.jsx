@@ -3,6 +3,23 @@ import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { COLORS } from "../../constants/colors";
 
+const LikeButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 16px;
+  background-color: ${props => props.isLiked ? COLORS.sig : 'white'};
+  color: ${props => props.isLiked ? 'white' : COLORS.sig};
+  border: 1px solid ${COLORS.sig};
+  border-radius: 20px;
+  cursor: pointer;
+  margin-top: 0; 
+
+  &:hover {
+    transform: scale(1.05);
+    transition: all 0.2s;
+  }
+`;
 
 const MainContainer = styled.div`
   border: 1px solid ${COLORS.bg};
@@ -20,6 +37,13 @@ const DetailContainer = styled.div`
 `;
 
 const PostHeader = styled.div`
+  margin-bottom: 20px;
+`;
+
+const InfoContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 const Title = styled.h1`
@@ -39,9 +63,14 @@ const Content = styled.div`
   border-radius:20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   min-height: 330px;
-
+  max-width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
   div {
     padding: 10px;
+    max-width: 100%;
+    white-space: pre-wrap;
+    overflow-x: hidden;
   }
 `;
 
@@ -141,6 +170,8 @@ export default function PostDetail() {
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [commentInput, setCommentInput] = useState('');
+  const [isLiked, setIsLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -149,6 +180,7 @@ export default function PostDetail() {
         const data = await response.json();
         const foundPost = data.find(p => p.id === parseInt(postId));
         setPost(foundPost);
+        setLikeCount(foundPost.likes || 0);
       } catch (error) {
         console.error('게시글 불러오는 데 실패했습니다. ', error);
       } finally {
@@ -158,6 +190,16 @@ export default function PostDetail() {
 
     fetchPost();
   }, [postId]);
+
+  const handleLike = async () => {
+    try {
+      // API 호출 로직 (실제 구현 시 추가)
+      setIsLiked(!isLiked);
+      setLikeCount(prev => isLiked ? prev - 1 : prev + 1);
+    } catch (error) {
+      console.error('좋아요 처리 실패:', error);
+    }
+  };
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
@@ -204,9 +246,14 @@ export default function PostDetail() {
           <BackButton onClick={() => navigate('/dev-board')}>← 목록으로</BackButton>
           <PostHeader>
             <Title>{post.title}</Title>
-            <PostInfo>
-              작성자: {post.name} | 작성일: {post.date}
-            </PostInfo>
+            <InfoContainer>
+              <PostInfo>
+                작성자: {post.name} | 작성일: {post.date}
+              </PostInfo>
+              <LikeButton onClick={handleLike} isLiked={isLiked}>
+                {isLiked ? '❤️' : '🤍'} 좋아요 {likeCount}
+              </LikeButton>
+            </InfoContainer>
           </PostHeader>
           <Content>
             <div>{post.content}</div>
