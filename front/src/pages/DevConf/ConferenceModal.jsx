@@ -180,7 +180,7 @@ export default function ConferenceModal({ conference, onClose }) {
 
               // API 요청 데이터 생성
               const payload = {
-                email: user.email, // userId를 상태나 props로 전달
+                userId: user.userId, // userId를 상태나 props로 전달
                 conferenceId: conference.id, // conferenceId를 상태나 props로 전달
               };
 

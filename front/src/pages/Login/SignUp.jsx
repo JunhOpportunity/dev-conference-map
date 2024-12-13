@@ -48,26 +48,6 @@ const handleSubmit = async (e) => {
       throw new Error("회원가입 실패");
     }
 
-    const { userId } = await response.json();
-    console.log("회원가입 성공, userId:", userId);
-
-    // userId로 사용자 데이터 요청
-    const userResponse = await fetch(`${API_ENDPOINTS.USERS.GET}/${userId}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!userResponse.ok) {
-      throw new Error("사용자 데이터를 가져오는데 실패했습니다");
-    }
-
-    const userData = await userResponse.json();
-    console.log("사용자 데이터 가져오기 성공:", userData);
-
-    // Redux에 사용자 데이터 업데이트
-    dispatch(addUser(userData));
   } catch (error) {
     console.error("오류 발생:", error);
   }
