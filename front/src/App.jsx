@@ -1,15 +1,30 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from './pages/Home/Home';
+import DevBoard from './pages/DevBoard/DevBoard';
+import PostDetail from './pages/DevBoard/PostDetail';
+import DevConf from './pages/DevConf/DevConf';
+import NavigationBar from './components/layout/NavigationBar';
+import MyPage from './pages/Mypage/Mypage';
+import SignIn from './pages/Login/Signin';
+import SignUp from './pages/Login/SignUp';
+
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      메인 페이지
-    </>
+    <Router>
+      <NavigationBar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/dev-board" element={<DevBoard />} />
+        <Route path="/dev-board/:postId" element={<PostDetail />} />
+        <Route path="/dev-conf" element={<DevConf />} />
+        <Route path="/mypage" element={<MyPage />} />
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/signup" element={<SignUp />} />
+      </Routes>
+    </Router>
   )
 }
 
