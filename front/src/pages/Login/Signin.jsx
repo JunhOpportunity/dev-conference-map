@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import './SignIn.css'; 
 import { API_ENDPOINTS } from '../../apis/apiEndpoints';
+import { useDispatch } from "react-redux";
+import { addUser } from '../../store/slices/userSlice';
 
 const SignIn = () => {
   const [formData, setFormData] = useState({
@@ -16,28 +18,50 @@ const SignIn = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await fetch(API_ENDPOINTS.USER.LOGIN, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData)
-      });
 
-      if (!response.ok) {
-        throw new Error('로그인에 실패했습니다');
-      }
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  const dispatch = useDispatch();
 
-      const data = await response.json();
-      console.log('로그인 성공:', data);
-      
-    } catch (error) {
-      console.error('로그인 실패:', error);
+  try {
+    // 로그인 요청
+    const response = await fetch(API_ENDPOINTS.USER.LOGIN, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    if (!response.ok) {
+      throw new Error("로그인에 실패했습니다");
     }
-  };
+
+    const { userId } = await response.json();
+    console.log("로그인 성공:", userId);
+
+    // userId로 사용자 데이터 요청
+    const userResponse = await fetch(`${API_ENDPOINTS.USER.GET}/${userId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!userResponse.ok) {
+      throw new Error("사용자 데이터를 가져오는데 실패했습니다");
+    }
+
+    const userData = await userResponse.json();
+    console.log("사용자 데이터 가져오기 성공:", userData);
+
+    // Redux에 사용자 데이터 업데이트
+    dispatch(addUser(userData));
+  } catch (error) {
+    console.error("오류 발생:", error);
+  }
+};
+
 
   return (
     <div className="auth-container">

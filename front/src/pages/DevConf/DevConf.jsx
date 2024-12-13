@@ -3,6 +3,7 @@ import styled from "styled-components";
 import ConferenceCard from "./ConferenceCard";
 import ConferenceModal from "./ConferenceModal";
 import API_ENDPOINTS from "../../apis/apiEndpoints";
+import { useSelector } from "react-redux";
 
 const AppContainer = styled.div`
   text-align: center;
@@ -85,6 +86,7 @@ export default function DevConf() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [sortOrder, setSortOrder] = useState("최신순");
   const [onlineOnly, setOnlineOnly] = useState(false);
+  const user = useSelector((state) => state.user);
 
   const toggleSortOrder = () => {
     setSortOrder((prev) => (prev === "최신순" ? "인기순" : "최신순"));
@@ -103,7 +105,7 @@ export default function DevConf() {
         }
         return response.json();
       })
-      .then((data) => setConferences(data.conferences))
+      .then((data) => {console.log(data); setConferences(data)})
       .catch((error) => {
         console.error("API fetch failed, falling back to local JSON:", error);
         
@@ -129,10 +131,10 @@ export default function DevConf() {
 
   // 데이터 필터링 및 정렬
   const filteredAndSortedConferences = conferences
-    .filter((conf) => !onlineOnly || conf.category.includes("온라인"))
+    .filter((conf) => !onlineOnly || conf.location.includes("온라인"))
     .sort((a, b) => {
       if (sortOrder === "최신순") {
-        return new Date(b.registration_period.start_date) - new Date(a.registration_period.start_date);
+        return new Date(b.registrationPeriod.start_date) - new Date(a.registrationPeriod.start_date);
       } else {
         return b.popularity - a.popularity; // 인기순 정렬
       }
