@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-import { addUser } from "../redux/userSlice"; // Redux 액션 가져오기
+import { addUser } from "../../store/slices/userSlice"; // Redux 액션 가져오기
 
 const PageContainer = styled.div`
   padding: 20px;
@@ -163,6 +163,7 @@ const IconButton = styled.button`
 
 export default function MyPage() {
   const user = useSelector((state) => state.user);
+  console.log("마이페이지",user)
   const dispatch = useDispatch();
   const userId = user.id; // Redux 상태에서 사용자 ID 가져오기
 
@@ -175,13 +176,15 @@ export default function MyPage() {
         }
         const userData = await response.json();
 
+        const interestArray = userData.interest.split(", ").map(item => item.trim())
+
         // Redux 상태 업데이트
         dispatch(
           addUser({
             id: userData.id,
             name: userData.name,
             email: userData.email,
-            interest: userData.interest,
+            interest: interestArray,
             wishlist: userData.wishlist,
             posts: userData.posts,
           })
@@ -249,9 +252,9 @@ export default function MyPage() {
             {user.wishlist.map((item, index) => (
               <WishlistItem key={index}>
                 <WishlistItemInfo>
-                  <h3>{item.title}</h3>
-                  <p>{item.registration_period.start_date}</p>
-                  <LearnMore href={item.website}>Learn more →</LearnMore>
+                  <h3>{item.confName}</h3>
+                  <p>{item.date}</p>
+                  {/* <LearnMore href={item.website}>Learn more →</LearnMore> */}
                 </WishlistItemInfo>
               </WishlistItem>
             ))}
