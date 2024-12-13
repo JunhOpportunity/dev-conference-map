@@ -121,10 +121,6 @@ const PostTitle = styled.h3`
   color: ${COLORS.sig};
 `;
 
-const HeartIcon = styled.span`
-  color: ${COLORS.sig};
-  font-size: 1.1em;
-`;
 
 const PostInfo = styled.p`
   margin: 0;
@@ -132,13 +128,6 @@ const PostInfo = styled.p`
   display: flex;
   align-items: center;
   gap: 10px;
-
-  .likes {
-    display: flex;
-    align-items: center;
-    gap: 3px;
-    font-weight: bold;
-  }
 `;
 
 const PaginationWrapper = styled.div`
@@ -241,9 +230,6 @@ export default function DevBoard() {
                 </div>
                 <PostInfo>
                   <span>{post.name} | {post.date}</span>
-                  <span className="likes">
-                    <HeartIcon>♥</HeartIcon> {post.likes || 0}
-                  </span>
                 </PostInfo>
               </PostContent>
             </PostItem>

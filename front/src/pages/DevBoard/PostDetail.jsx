@@ -5,24 +5,6 @@ import styled from "styled-components";
 import { COLORS } from "../../constants/colors";
 import { API_ENDPOINTS } from "../../apis/apiEndpoints";
 
-const LikeButton = styled.button`
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 8px 16px;
-  background-color: ${props => props.isLiked ? COLORS.sig : 'white'};
-  color: ${props => props.isLiked ? 'white' : COLORS.sig};
-  border: 1px solid ${COLORS.sig};
-  border-radius: 20px;
-  cursor: pointer;
-  margin-top: 0; 
-
-  &:hover {
-    transform: scale(1.05);
-    transition: all 0.2s;
-  }
-`;
-
 const MainContainer = styled.div`
   border: 1px solid ${COLORS.bg};
   border-radius: 20px;
@@ -174,16 +156,13 @@ export default function PostDetail() {
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [commentInput, setCommentInput] = useState('');
-  const [isLiked, setIsLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(0);
 
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await fetch(`${API_ENDPOINTS.BOARDS.GET_ONE}/${postId}`);
+        const response = await fetch(API_ENDPOINTS.BOARDS.GET_ALL);
         const data = await response.json();
         setPost(data);
-        setLikeCount(data.likes || 0);
       } catch (error) {
         console.error('게시글 불러오는 데 실패했습니다. ', error);
       } finally {
@@ -194,23 +173,6 @@ export default function PostDetail() {
     fetchPost();
   }, [postId]);
 
-  const handleLike = async () => {
-    try {
-      const response = await fetch(`${API_ENDPOINTS.BOARDS.LIKE}/${postId}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      });
-      if (response.ok) {
-        setIsLiked(!isLiked);
-        setLikeCount(prev => isLiked ? prev - 1 : prev + 1);
-        // 여기에 필요한 경우 Redux action dispatch 추가
-      }
-    } catch (error) {
-      console.error('좋아요 처리 실패:', error);
-    }
-  };
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
@@ -259,9 +221,6 @@ export default function PostDetail() {
               <PostInfo>
                 작성자: {post.name} | 작성일: {post.date}
               </PostInfo>
-              <LikeButton onClick={handleLike} isLiked={isLiked}>
-                {isLiked ? '❤️' : '🤍'} 좋아요 {likeCount}
-              </LikeButton>
             </InfoContainer>
           </PostHeader>
           <Content>
