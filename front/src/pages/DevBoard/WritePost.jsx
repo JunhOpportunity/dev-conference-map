@@ -112,7 +112,6 @@ export default function WritePost({ onClose }) {
 
   const handleSubmit = async () => {
     const newPost = {
-      id: Date.now(), // 임시 ID 생성
       title: title,
       content: content,
       created_at: new Date().toISOString().split('T')[0]
