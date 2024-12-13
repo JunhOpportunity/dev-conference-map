@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import './SignUp.css';
-import { signUp } from './api';
 import { API_ENDPOINTS } from '../../apis/apiEndpoints';
 import { useDispatch } from "react-redux";
 import { addUser } from '../../store/slices/userSlice';
@@ -28,31 +27,35 @@ const SignUp = () => {
     }));
   };
 
-  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  const dispatch = useDispatch();
+    // interests 배열을 쉼표로 구분된 문자열로 변환
+    const formattedFormData = {
+      ...formData,
+      interests: formData.interests.join(", ")
+    };
 
-  try {
-    // 회원가입 요청
-    const response = await fetch(API_ENDPOINTS.USERS.REGISTER, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
+    try {
+      // 회원가입 요청
+      const response = await fetch(API_ENDPOINTS.USER.REGISTER, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formattedFormData),
+      });
 
-    if (!response.ok) {
-      throw new Error("회원가입 실패");
+      console.log("Submitted Data:", formattedFormData);
+
+      if (!response.ok) {
+        throw new Error("회원가입 실패");
+      }
+
+    } catch (error) {
+      console.error("오류 발생:", error);
     }
-
-  } catch (error) {
-    console.error("오류 발생:", error);
-  }
-};
-
+  };
 
   return (
     <div className="auth-container">

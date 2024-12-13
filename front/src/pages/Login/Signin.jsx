@@ -10,6 +10,8 @@ const SignIn = () => {
     password: ''
   });
 
+  const dispatch = useDispatch(); // 컴포넌트 내부에서 useDispatch 선언
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prevData => ({
@@ -18,34 +20,31 @@ const SignIn = () => {
     }));
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  const dispatch = useDispatch();
+    try {
+      // 로그인 요청
+      const response = await fetch(API_ENDPOINTS.USERS.LOGIN, { // USER -> USERS 수정
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-  try {
-    // 로그인 요청
-    const response = await fetch(API_ENDPOINTS.USER.LOGIN, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
+      if (!response.ok) {
+        throw new Error("로그인에 실패했습니다");
+      }
 
-    if (!response.ok) {
-      throw new Error("로그인에 실패했습니다");
+      const { user } = await response.json();
+      console.log("로그인 성공:", user);
+
+      dispatch(addUser(user)); // Redux에 사용자 정보 저장
+    } catch (error) {
+      console.error("오류 발생:", error);
     }
-
-    const { user } = await response.json();
-    console.log("로그인 성공:", user);
-
-    dispatch(addUser(user));
-  } catch (error) {
-    console.error("오류 발생:", error);
-  }
-};
-
+  };
 
   return (
     <div className="auth-container">
