@@ -1,5 +1,4 @@
 import React from 'react';
-import './auth.css';
 
 const Button = ({ children, onClick, variant = 'default', icon, ...props }) => {
   const buttonStyles = {
