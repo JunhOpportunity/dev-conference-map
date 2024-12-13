@@ -2,9 +2,17 @@ import styled from "styled-components";
 import { COLORS } from "../../constants/colors";
 import { ROUND } from "../../constants/round";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
+// import { setUser } from '../store/slices/userSlice';
 
 export default function Home() {
   const navigate = useNavigate();
+  const user = useSelector((state) => state.user);
+  console.log("redux", user);
+
+  // const dispatch = useDispatch();
+  // dispatch(setUser(userData));
 
   return (
     <AppContainer>
