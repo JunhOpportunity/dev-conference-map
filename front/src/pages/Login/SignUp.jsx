@@ -3,13 +3,15 @@ import './SignUp.css';
 import { API_ENDPOINTS } from '../../apis/apiEndpoints';
 import { useDispatch } from "react-redux";
 import { addUser } from '../../store/slices/userSlice';
+import { useNavigate } from 'react-router-dom';
 
 const SignUp = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
     username: '',
-    interests: []
+    interest: []
   });
 
   const handleChange = (e) => {
@@ -21,9 +23,9 @@ const SignUp = () => {
     const { value, checked } = e.target;
     setFormData(prevData => ({
       ...prevData,
-      interests: checked
-        ? [...prevData.interests, value]
-        : prevData.interests.filter(interest => interest !== value)
+      interest: checked
+        ? [...prevData.interest, value]
+        : prevData.interest.filter(interest => interest !== value)
     }));
   };
 
@@ -33,7 +35,7 @@ const SignUp = () => {
     // interests 배열을 쉼표로 구분된 문자열로 변환
     const formattedFormData = {
       ...formData,
-      interests: formData.interests.join(", ")
+      interest: formData.interest.join(", ")
     };
 
     try {
@@ -51,6 +53,8 @@ const SignUp = () => {
       if (!response.ok) {
         throw new Error("회원가입 실패");
       }
+
+      navigate("/signin"); // 로그인 페이지로 이동
 
     } catch (error) {
       console.error("오류 발생:", error);
@@ -103,7 +107,7 @@ const SignUp = () => {
                 <input
                   type="checkbox"
                   value={interest}
-                  checked={formData.interests.includes(interest)}
+                  checked={formData.interest.includes(interest)}
                   onChange={handleInterestChange}
                   className="interest-checkbox"
                 />
