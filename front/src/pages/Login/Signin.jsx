@@ -27,7 +27,7 @@ const SignIn = () => {
   
     try {
       // 로그인 요청
-      const response = await fetch(API_ENDPOINTS.USERS.LOGIN, {
+      const response = await fetch(API_ENDPOINTS.USER.LOGIN, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

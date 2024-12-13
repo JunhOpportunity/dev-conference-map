@@ -99,6 +99,7 @@ export default function NavigationBar() {
     const location = useLocation();
     const dispatch = useDispatch();
     const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
+    const user = useSelector(state => state.user);
 
     const handleLogout = () => {
         dispatch(logout());
@@ -123,7 +124,7 @@ export default function NavigationBar() {
                     <div>마이 페이지</div>
                 </MenuButton>
             </MenuContainer>
-            {isLoggedIn ? (
+            {user.id ? (
                 <LogoutButton onClick={handleLogout}>로그아웃</LogoutButton>
             ) : (
                 <LoginButton onClick={() => navigate("/signin")}>로그인</LoginButton>
