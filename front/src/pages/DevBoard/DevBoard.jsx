@@ -4,7 +4,7 @@ import { COLORS } from "../../constants/colors";
 import WritePost from "./WritePost";
 import { useNavigate } from "react-router-dom";
 import { API_ENDPOINTS } from "../../apis/apiEndpoints";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 const BoardContainer = styled.div`
   display: flex;
@@ -163,7 +163,6 @@ const PageButton = styled.button`
 `;
 
 export default function DevBoard() {
-  const dispatch = useDispatch();
   const user = useSelector(state => state.user);
   const userPosts = useSelector(state => state.user.posts);
   const navigate = useNavigate();

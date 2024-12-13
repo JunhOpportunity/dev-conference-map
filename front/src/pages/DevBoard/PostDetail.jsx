@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { COLORS } from "../../constants/colors";
 import { API_ENDPOINTS } from "../../apis/apiEndpoints";
@@ -151,7 +151,6 @@ const CommentInfo = styled.div`
 export default function PostDetail() {
   const { postId } = useParams();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const user = useSelector(state => state.user);
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -162,7 +161,8 @@ export default function PostDetail() {
       try {
         const response = await fetch(API_ENDPOINTS.BOARDS.GET_ALL);
         const data = await response.json();
-        setPost(data);
+        const selectedPost = data.find(post => post.id === parseInt(postId));  
+        setPost(selectedPost);
       } catch (error) {
         console.error('게시글 불러오는 데 실패했습니다. ', error);
       } finally {
@@ -186,7 +186,7 @@ export default function PostDetail() {
     };
 
     try {
-      const response = await fetch(API_ENDPOINTS.BOARDS.COMMENT.CREATE, {
+      const response = await fetch(API_ENDPOINTS.BOARDS.CREATE, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
