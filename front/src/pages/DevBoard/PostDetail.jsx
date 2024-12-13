@@ -159,7 +159,7 @@ export default function PostDetail() {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await fetch(API_ENDPOINTS.BOARDS.CREATE);
+        const response = await fetch(API_ENDPOINTS.BOARDS.GET_ALL);
         const data = await response.json();
         const selectedPost = data.find(post => post.id === parseInt(postId));  
         setPost(selectedPost);
