@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { COLORS } from "../../constants/colors";
 import WritePost from "./WritePost";
 import { useNavigate } from "react-router-dom";
-
+import { API_ENDPOINTS } from "../../apis/apiEndpoints";
 
 const BoardContainer = styled.div`
   display: flex;
@@ -183,7 +183,7 @@ export default function DevBoard() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await fetch('/data/posts.json');
+        const response = await fetch(API_ENDPOINTS.BOARDS.GET_ALL);
         const data = await response.json();
         setPosts(data);
       } catch (error) {

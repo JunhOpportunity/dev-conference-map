@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { COLORS } from '../../constants/colors';
+import { API_ENDPOINTS } from '../../apis/apiEndpoints';
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -108,17 +109,12 @@ export default function WritePost({ onClose }) {
 
   const handleSubmit = async () => {
     const newPost = {
-      id: Date.now(), // 임시 ID 생성
       title: title,
-      name: "Anonymous", // 임시 사용자 이름
-      date: new Date().toISOString().slice(0, 16).replace('T', ' '),
       content: content,
-      likes: 0,
-      comments: []
     };
 
     try {
-      const response = await fetch('/data/posts.json', {
+      const response = await fetch(API_ENDPOINTS.BOARDS.CREATE, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { COLORS } from "../../constants/colors";
+import { API_ENDPOINTS } from "../../apis/apiEndpoints";
 
 const LikeButton = styled.button`
   display: flex;
@@ -176,11 +177,10 @@ export default function PostDetail() {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await fetch('/data/posts.json');
+        const response = await fetch(`${API_ENDPOINTS.BOARDS.GET_ONE}/${postId}`);
         const data = await response.json();
-        const foundPost = data.find(p => p.id === parseInt(postId));
-        setPost(foundPost);
-        setLikeCount(foundPost.likes || 0);
+        setPost(data);
+        setLikeCount(data.likes || 0);
       } catch (error) {
         console.error('게시글 불러오는 데 실패했습니다. ', error);
       } finally {
@@ -193,9 +193,16 @@ export default function PostDetail() {
 
   const handleLike = async () => {
     try {
-      // API 호출 로직 (실제 구현 시 추가)
-      setIsLiked(!isLiked);
-      setLikeCount(prev => isLiked ? prev - 1 : prev + 1);
+      const response = await fetch(`${API_ENDPOINTS.BOARDS.LIKE}/${postId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+      if (response.ok) {
+        setIsLiked(!isLiked);
+        setLikeCount(prev => isLiked ? prev - 1 : prev + 1);
+      }
     } catch (error) {
       console.error('좋아요 처리 실패:', error);
     }
@@ -206,28 +213,24 @@ export default function PostDetail() {
     if (!commentInput.trim()) return;
 
     const newComment = {
-      name: "currentUser", // 실제 사용시 로그인된 사용자 정보 사용
-      nameId: Date.now(), // 임시 ID 생성
-      date: new Date().toISOString().slice(0, 16).replace('T', ' '),
+      postId: parseInt(postId),
       content: commentInput
     };
 
     try {
-      const response = await fetch('/data/posts.json', {
+      const response = await fetch(API_ENDPOINTS.BOARDS.COMMENT.CREATE, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          postId: parseInt(postId),
-          comment: newComment
-        }),
+        body: JSON.stringify(newComment),
       });
 
       if (response.ok) {
+        const data = await response.json();
         setPost({
           ...post,
-          comments: [...post.comments, newComment]
+          comments: [...post.comments, data]
         });
         setCommentInput('');
       }
