@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import { COLORS } from "../../constants/colors";
 import { API_ENDPOINTS } from "../../apis/apiEndpoints";
@@ -168,6 +169,8 @@ const CommentInfo = styled.div`
 export default function PostDetail() {
   const { postId } = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector(state => state.user);
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [commentInput, setCommentInput] = useState('');
@@ -202,6 +205,7 @@ export default function PostDetail() {
       if (response.ok) {
         setIsLiked(!isLiked);
         setLikeCount(prev => isLiked ? prev - 1 : prev + 1);
+        // 여기에 필요한 경우 Redux action dispatch 추가
       }
     } catch (error) {
       console.error('좋아요 처리 실패:', error);
@@ -214,7 +218,9 @@ export default function PostDetail() {
 
     const newComment = {
       postId: parseInt(postId),
-      content: commentInput
+      content: commentInput,
+      name: user.name, // Redux store에서 사용자 정보 사용
+      date: new Date().toISOString().split('T')[0]
     };
 
     try {

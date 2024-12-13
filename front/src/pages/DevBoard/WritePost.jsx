@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { COLORS } from '../../constants/colors';
 import { API_ENDPOINTS } from '../../apis/apiEndpoints';
+import { addPost } from '../../store/slices/userSlice';
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -104,13 +106,16 @@ const SubmitButton = styled(Button)`
 `;
 
 export default function WritePost({ onClose }) {
+  const dispatch = useDispatch();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
 
   const handleSubmit = async () => {
     const newPost = {
+      id: Date.now(), // 임시 ID 생성
       title: title,
       content: content,
+      created_at: new Date().toISOString().split('T')[0]
     };
 
     try {
@@ -125,6 +130,8 @@ export default function WritePost({ onClose }) {
       if (!response.ok) {
         throw new Error('게시글 등록에 실패했습니다.');
       }
+
+      dispatch(addPost({ userId: 1, post: newPost }));
       onClose();
     } catch (error) {
       console.error('Error:', error);

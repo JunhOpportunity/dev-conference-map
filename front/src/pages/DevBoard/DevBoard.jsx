@@ -4,6 +4,7 @@ import { COLORS } from "../../constants/colors";
 import WritePost from "./WritePost";
 import { useNavigate } from "react-router-dom";
 import { API_ENDPOINTS } from "../../apis/apiEndpoints";
+import { useSelector, useDispatch } from "react-redux";
 
 const BoardContainer = styled.div`
   display: flex;
@@ -173,6 +174,9 @@ const PageButton = styled.button`
 `;
 
 export default function DevBoard() {
+  const dispatch = useDispatch();
+  const user = useSelector(state => state.user);
+  const userPosts = useSelector(state => state.user.posts);
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [sortOrder, setSortOrder] = useState('desc');
@@ -185,14 +189,14 @@ export default function DevBoard() {
       try {
         const response = await fetch(API_ENDPOINTS.BOARDS.GET_ALL);
         const data = await response.json();
-        setPosts(data);
+        setPosts([...data, ...userPosts]); // Redux store의 posts와 서버 데이터 병합
       } catch (error) {
         console.error('게시글을 불러오는데 실패했습니다:', error);
       }
     };
 
     fetchPosts();
-  }, []);
+  }, [userPosts]);
 
   // 정렬된 게시글 목록 생성
   const sortedPosts = [...posts].sort((a, b) => {
