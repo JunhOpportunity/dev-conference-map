@@ -10,7 +10,7 @@ const SignUp = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
-    username: '',
+    name: '',
     interest: []
   });
 
@@ -93,9 +93,9 @@ const SignUp = () => {
           />
           <input
             type="text"
-            name="username"
+            name="name"
             placeholder="사용자명"
-            value={formData.username}
+            value={formData.name}
             onChange={handleChange}
             className="signup-input"
             required
