@@ -59,7 +59,7 @@ const SignIn = () => {
   
       // Redux에 사용자 정보 저장
       dispatch(addUser(user));
-  
+      
       navigate("/"); // 마이페이지로 이동
     } catch (error) {
       console.error("오류 발생:", error);

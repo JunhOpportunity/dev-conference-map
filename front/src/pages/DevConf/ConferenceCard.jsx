@@ -89,7 +89,6 @@ const StarIcon = styled.div`
 
 export default function ConferenceCard({ conference, onClick }) {
   const randomImageUrl = `https://picsum.photos/seed/${conference.id}/300/150`;
-  console.log(randomImageUrl);
   return (
     <Card onClick={onClick}>
       <ImageContainer>

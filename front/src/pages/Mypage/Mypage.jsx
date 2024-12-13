@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import {useSelector} from "react-redux";
+import { addUser } from "../../store/slices/userSlice";
 
 const PageContainer = styled.div`
   padding: 20px;
@@ -160,33 +161,43 @@ const IconButton = styled.button`
   cursor: pointer;
 `;
 
-// Main Component
+
 export default function MyPage() {
   const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const userId = user.id; // Redux 상태에서 userId 가져오기
 
-  // 게시글 삭제 함수
-  const handleDeletePost = async (postId) => {
-    try {
-      const response = await fetch(`/api/posts/${postId}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch(`http://localhost:8081/api/users/get/${userId}`);
+        if (!response.ok) {
+          throw new Error("사용자 정보를 가져오지 못했습니다.");
+        }
+        const userData = await response.json();
 
-      if (response.ok) {
-        // 서버 요청 성공 시, UI에서 해당 게시글 제거
-        setUser((prevState) => ({
-          ...prevState,
-          posts: prevState.posts.filter((post) => post.id !== postId),
-        }));
-      } else {
-        console.error("Failed to delete post");
+        // Redux 상태 업데이트
+        dispatch(
+          addUser({
+            id: userData.id,
+            name: userData.name,
+            email: userData.email,
+            interest: userData.interest,
+            wishlist: userData.wishlist,
+            posts: userData.posts,
+          })
+        );
+      } catch (error) {
+        console.error("사용자 정보 요청 중 오류:", error);
       }
-    } catch (error) {
-      console.error("Error deleting post:", error);
+    };
+
+    if (userId) {
+      fetchUserData();
     }
-  };
+  }, [userId, dispatch]);
+
+  // 게시글 삭제 함수 (생략)...
 
   return (
     <PageContainer>
@@ -196,15 +207,6 @@ export default function MyPage() {
           <InputContainer>
             <Label>유저명</Label>
             <ReadOnlyInput>{user.name}</ReadOnlyInput>
-          </InputContainer>
-          <InputContainer>
-            <Label>소셜 로그인</Label>
-            <ReadOnlyInput>
-              <span role="img" aria-label="Google">
-                🌐
-              </span>{" "}
-              {user.socialEmail}
-            </ReadOnlyInput>
           </InputContainer>
           <InputContainer>
             <Label>이메일</Label>
@@ -245,49 +247,7 @@ export default function MyPage() {
               </div>
               <IconContainer>
                 <IconButton onClick={() => handleDeletePost(post.id)}>
-                  <svg
-                    width="22"
-                    height="21"
-                    viewBox="0 0 22 21"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M16.3848 19.4615H5.61561C5.20758 19.4615 4.81627 19.2995 4.52775 19.0109C4.23924 18.7224 4.07715 18.3311 4.07715 17.9231V4.07693H17.9233V17.9231C17.9233 18.3311 17.7612 18.7224 17.4727 19.0109C17.1842 19.2995 16.7929 19.4615 16.3848 19.4615Z"
-                      stroke="#5D5A88"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M8.69238 14.8462V8.69232"
-                      stroke="#5D5A88"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M13.3076 14.8462V8.69232"
-                      stroke="#5D5A88"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M1 4.07693H21"
-                      stroke="#5D5A88"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                    <path
-                      d="M13.3081 1H8.69276C8.28473 1 7.89342 1.16209 7.6049 1.45061C7.31638 1.73912 7.1543 2.13044 7.1543 2.53846V4.07692H14.8466V2.53846C14.8466 2.13044 14.6845 1.73912 14.396 1.45061C14.1075 1.16209 13.7162 1 13.3081 1Z"
-                      stroke="#5D5A88"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
+                  {/* 삭제 아이콘 */}
                 </IconButton>
               </IconContainer>
             </PostItem>

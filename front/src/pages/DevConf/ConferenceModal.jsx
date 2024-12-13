@@ -118,6 +118,9 @@ export default function ConferenceModal({ conference, onClose }) {
   const [isInWishlist, setIsInWishlist] = useState(false);
   const user = useSelector((state) => state.user);
 
+  console.log("redux data",user);
+
+
   useEffect(() => {
     if (!window.naver || !window.naver.maps.Service) {
       console.error("Naver Maps API is not loaded.");
@@ -180,7 +183,7 @@ export default function ConferenceModal({ conference, onClose }) {
 
               // API 요청 데이터 생성
               const payload = {
-                userId: user.userId, // userId를 상태나 props로 전달
+                userId: user.id, // userId를 상태나 props로 전달
                 conferenceId: conference.id, // conferenceId를 상태나 props로 전달
               };
 
