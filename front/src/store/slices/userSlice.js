@@ -33,5 +33,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { addUser, updateWishlist, addPost } = userSlice.actions;
+export const { addUser, updateWishlist, addPost, addComment } = userSlice.actions;
 export default userSlice.reducer;

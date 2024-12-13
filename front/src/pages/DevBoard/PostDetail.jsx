@@ -159,7 +159,7 @@ export default function PostDetail() {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await fetch(API_ENDPOINTS.BOARDS.GET_ALL);
+        const response = await fetch("http://localhost:8081/api/comments/create");
         const data = await response.json();
         const selectedPost = data.find(post => post.id === parseInt(postId));  
         setPost(selectedPost);
@@ -179,10 +179,9 @@ export default function PostDetail() {
     if (!commentInput.trim()) return;
 
     const newComment = {
-      postId: parseInt(postId),
+      post: {id: parseInt(postId)},
+      user : {id: user.id},
       content: commentInput,
-      name: user.name, // Redux store에서 사용자 정보 사용
-      date: new Date().toISOString().split('T')[0]
     };
 
     try {

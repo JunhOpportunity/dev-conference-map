@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { COLORS } from '../../constants/colors';
 import { API_ENDPOINTS } from '../../apis/apiEndpoints';
@@ -107,6 +107,7 @@ const SubmitButton = styled(Button)`
 
 export default function WritePost({ onClose }) {
   const dispatch = useDispatch();
+  const userId = useSelector(state => state.user.id);  // userId -> id로 수정
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
 
@@ -114,7 +115,7 @@ export default function WritePost({ onClose }) {
     const newPost = {
       title: title,
       content: content,
-      created_at: new Date().toISOString().split('T')[0]
+      userId: userId
     };
 
     try {
@@ -130,7 +131,7 @@ export default function WritePost({ onClose }) {
         throw new Error('게시글 등록에 실패했습니다.');
       }
 
-      dispatch(addPost({ userId: 1, post: newPost }));
+      dispatch(addPost({ userId: userId, post: newPost }));
       onClose();
     } catch (error) {
       console.error('Error:', error);
