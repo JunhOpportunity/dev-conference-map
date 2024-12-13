@@ -92,6 +92,7 @@ const SignIn = () => {
             required
           />
           <button type="submit" className="register-button">로그인</button>
+          <button onClick={() => navigate("/signup")} className="register-button">회원가입</button>
         </form>
       </div>
     </div>

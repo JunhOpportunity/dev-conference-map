@@ -103,7 +103,7 @@ export default function NavigationBar() {
 
     const handleLogout = () => {
         dispatch(logout());
-        navigate('/');
+        navigate(0);
     };
 
     return (
