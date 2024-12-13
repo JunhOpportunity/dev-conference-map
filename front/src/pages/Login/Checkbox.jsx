@@ -1,5 +1,4 @@
 import React from 'react';
-import './auth.css'
 
 const Checkbox = ({ label, checked, onChange, ...props }) => {
   return (

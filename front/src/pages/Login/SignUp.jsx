@@ -1,69 +1,109 @@
 import React, { useState } from 'react';
-import './auth.css';
+import './SignUp.css';
+import { signUp } from './api';
+import { API_ENDPOINTS } from '../../apis/apiEndpoints';
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
     email: '',
+    password: '',
     username: '',
     interests: []
   });
 
-  const interestOptions = [
-    { id: 'online', label: '온라인' },
-    { id: 'offline', label: '오프라인' },
-    { id: 'education', label: '교육' },
-    { id: 'ai', label: 'AI' },
-    { id: 'frontend', label: '프론트엔드' },
-    { id: 'backend', label: '백엔드' },
-    { id: 'ios', label: 'iOS' },
-    { id: 'android', label: '안드로이드' },
-    { id: 'security', label: '보안' },
-    { id: 'data', label: '데이터' },
-    { id: 'infra', label: '인프라' }
-  ];
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prevData => ({ ...prevData, [name]: value }));
+  };
 
-  const handleInterestChange = (id) => {
-    setFormData(prev => ({
-      ...prev,
-      interests: prev.interests.includes(id)
-        ? prev.interests.filter(item => item !== id)
-        : [...prev.interests, id]
+  const handleInterestChange = (e) => {
+    const { value, checked } = e.target;
+    setFormData(prevData => ({
+      ...prevData,
+      interests: checked
+        ? [...prevData.interests, value]
+        : prevData.interests.filter(interest => interest !== value)
     }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(API_ENDPOINTS.USER.REGISTER, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      });
+
+      if (!response.ok) {
+        throw new Error('회원가입 실패');
+      }
+
+      const data = await response.json();
+      console.log('회원가입 성공:', data);
+    } catch (error) {
+      console.error('회원가입 실패:', error);
+    }
   };
 
   return (
     <div className="auth-container">
-      <div className="auth-box signup">
+      <nav className="navbar">
+        <div className="logo">Logo</div>
+      </nav>
+      <div className="auth-content">
         <h1>Sign Up</h1>
-        <form>
+        <h2>Create your account</h2>
+        <p>컨퍼런스 소식을 구독받을 메일을 입력하세요.</p>
+      </div>
+      <div className="signup-content">
+        <form onSubmit={handleSubmit}>
           <input
             type="email"
-            placeholder="이메일 주소"
+            name="email"
+            placeholder="이메일"
             value={formData.email}
-            onChange={(e) => setFormData({...formData, email: e.target.value})}
+            onChange={handleChange}
+            className="signup-input"
+            required
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="비밀번호"
+            value={formData.password}
+            onChange={handleChange}
+            className="signup-input"
+            required
           />
           <input
             type="text"
-            placeholder="유저명"
+            name="username"
+            placeholder="사용자명"
             value={formData.username}
-            onChange={(e) => setFormData({...formData, username: e.target.value})}
+            onChange={handleChange}
+            className="signup-input"
+            required
           />
           <div className="interests-section">
-            <p>관심 분야</p>
-            <div className="checkbox-grid">
-              {interestOptions.map(option => (
-                <label key={option.id}>
-                  <input
-                    type="checkbox"
-                    checked={formData.interests.includes(option.id)}
-                    onChange={() => handleInterestChange(option.id)}
-                  />
-                  {option.label}
-                </label>
-              ))}
-            </div>
+            <h3>관심 분야</h3>
+            {['온라인', '오프라인', 'iOS', '안드로이드', '보안', '교육', 'AI', '프론트엔드', '백엔드', '데이터', '인프라'].map((interest) => (
+              <label key={interest} className="interest-label">
+                <input
+                  type="checkbox"
+                  value={interest}
+                  checked={formData.interests.includes(interest)}
+                  onChange={handleInterestChange}
+                  className="interest-checkbox"
+                />
+                <span className="checkmark"></span>
+                {interest}
+              </label>
+            ))}
           </div>
-          <button type="submit" className="register-btn">Register</button>
+          <button type="submit" className="register-button">Register</button>
         </form>
       </div>
     </div>
