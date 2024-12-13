@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './SignUp.css';
 import { signUp } from './api';
+import { API_ENDPOINTS } from '../../apis/apiEndpoints';
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
@@ -28,12 +29,22 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await signUp(formData);
-      console.log('회원가입 성공:', response);
-      // 성공 처리 로직 -> 로그인 페이지로 이동 onClick={() => navigate("/signin")
+      const response = await fetch(API_ENDPOINTS.USER.REGISTER, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      });
+
+      if (!response.ok) {
+        throw new Error('회원가입 실패');
+      }
+
+      const data = await response.json();
+      console.log('회원가입 성공:', data);
     } catch (error) {
       console.error('회원가입 실패:', error);
-      console.log(formData);
     }
   };
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './SignIn.css'; 
-import { signIn } from './api';
+import { API_ENDPOINTS } from '../../apis/apiEndpoints';
 
 const SignIn = () => {
   const [formData, setFormData] = useState({
@@ -19,9 +19,21 @@ const SignIn = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await signIn(formData);
-      console.log('로그인 성공:', response);
-      // 성공 처리 로직 -> 메인 페이지로 이동 onClick={() => navigate("/home")
+      const response = await fetch(API_ENDPOINTS.USER.LOGIN, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      });
+
+      if (!response.ok) {
+        throw new Error('로그인에 실패했습니다');
+      }
+
+      const data = await response.json();
+      console.log('로그인 성공:', data);
+      
     } catch (error) {
       console.error('로그인 실패:', error);
     }
