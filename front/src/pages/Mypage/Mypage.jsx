@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import {useSelector} from "react-redux";
 
 const PageContainer = styled.div`
   padding: 20px;
@@ -161,84 +162,7 @@ const IconButton = styled.button`
 
 // Main Component
 export default function MyPage() {
-  const user = {
-    id: 1,
-    name: "김준호",
-    email: "example@email.com",
-    socialLogin: "Google",
-    socialEmail: "example@gmail.com",
-    interest: ["프론트엔드", "백엔드", "디자인"],
-    wishlist: [
-      {
-        id: 1,
-        title: "우아한형제들 기술이사 김민태의 데브캠프",
-        category: ["온라인", "유료", "프론트엔드"],
-        organizer: "패스트캠퍼스",
-        location: "서울특별시 강남구 영동대로 513",
-        registration_period: {
-          start_date: "2024-10-23",
-          end_date: "2024-12-01",
-        },
-        description:
-          "우아한형제들 기술이사가 전하는 프론트엔드 최신 트렌드와 실전 경험을 공유합니다.",
-        website: "https://fastcampus.co.kr/devcamp2024",
-      },
-      {
-        id: 2,
-        title: "경기도 판교 Next.js 실전 컨퍼런스",
-        category: ["오프라인", "유료", "풀스택"],
-        organizer: "Next Academy",
-        location: "경기도 판교",
-        registration_period: {
-          start_date: "2024-11-15",
-          end_date: "2024-12-10",
-        },
-        description:
-          "Next.js 기반의 풀스택 개발을 실전에서 활용하기 위한 노하우를 공유하는 컨퍼런스.",
-        website: "https://nextacademy.io/conference",
-      },
-      {
-        id: 3,
-        title: "우아한형제들 기술이사 김민태의 데브캠프",
-        category: ["온라인", "유료", "프론트엔드"],
-        organizer: "패스트캠퍼스",
-        location: "서울특별시 강남구 영동대로 513",
-        registration_period: {
-          start_date: "2024-10-23",
-          end_date: "2024-12-01",
-        },
-        description:
-          "우아한형제들 기술이사가 전하는 프론트엔드 최신 트렌드와 실전 경험을 공유합니다.",
-        website: "https://fastcampus.co.kr/devcamp2024",
-      },
-      {
-        id: 4,
-        title: "경기도 판교 Next.js 실전 컨퍼런스",
-        category: ["오프라인", "유료", "풀스택"],
-        organizer: "Next Academy",
-        location: "경기도 판교",
-        registration_period: {
-          start_date: "2024-11-15",
-          end_date: "2024-12-10",
-        },
-        description:
-          "Next.js 기반의 풀스택 개발을 실전에서 활용하기 위한 노하우를 공유하는 컨퍼런스.",
-        website: "https://nextacademy.io/conference",
-      },
-    ],
-    posts: [
-      {
-        id: 101,
-        title: "FECONF2024 티켓 양도합니다",
-        created_at: "2024-11-21",
-      },
-      {
-        id: 102,
-        title: "TEO CONF 같이 가실 분 구합니다",
-        created_at: "2024-11-15",
-      },
-    ],
-  };
+  const user = useSelector((state) => state.user);
 
   // 게시글 삭제 함수
   const handleDeletePost = async (postId) => {
