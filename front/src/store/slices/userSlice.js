@@ -32,7 +32,6 @@ const initialState = {
       created_at: "2024-12-10",
     },
   ],
-  comments: [], // 댓글 추가
 };
 
 const userSlice = createSlice({
@@ -55,9 +54,6 @@ const userSlice = createSlice({
       if (user) {
         user.posts.push(post);
       }
-    },
-    addComment: (state, action) => {    //댓글 추가
-      state.comments.push(action.payload);
     },
   },
 });
