@@ -159,7 +159,7 @@ export default function PostDetail() {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await fetch("http://localhost:8081/api/comments/create");
+        const response = await fetch(API_ENDPOINTS.BOARDS.CREATE);
         const data = await response.json();
         const selectedPost = data.find(post => post.id === parseInt(postId));  
         setPost(selectedPost);
@@ -185,7 +185,7 @@ export default function PostDetail() {
     };
 
     try {
-      const response = await fetch(API_ENDPOINTS.BOARDS.CREATE, {
+      const response = await fetch("http://localhost:8081/api/comments/create", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
