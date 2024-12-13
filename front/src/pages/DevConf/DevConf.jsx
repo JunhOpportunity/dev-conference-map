@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import ConferenceCard from "./ConferenceCard";
 import ConferenceModal from "./ConferenceModal";
+import API_ENDPOINTS from "../../apis/apiEndpoints";
 
 const AppContainer = styled.div`
   text-align: center;
@@ -94,10 +95,26 @@ export default function DevConf() {
   };
 
   useEffect(() => {
-    fetch("/data/conferences.json")
-      .then((response) => response.json())
+    // API 요청
+    fetch(API_ENDPOINTS.CONFERENCES.GET_ALL)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch from API");
+        }
+        return response.json();
+      })
       .then((data) => setConferences(data.conferences))
-      .catch((error) => console.error("Error loading data:", error));
+      .catch((error) => {
+        console.error("API fetch failed, falling back to local JSON:", error);
+        
+        // 실패할 경우 로컬 JSON으로 대체
+        fetch("/data/conferences.json")
+          .then((response) => response.json())
+          .then((localData) => setConferences(localData.conferences))
+          .catch((localError) =>
+            console.error("Error loading local JSON:", localError)
+          );
+      });
   }, []);
 
   const openModal = (conference) => {
