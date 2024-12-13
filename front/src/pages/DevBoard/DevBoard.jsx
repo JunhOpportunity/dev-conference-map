@@ -39,7 +39,7 @@ const PostItem = styled.div`
 
   &:hover {
     background-color: ${COLORS.bg};
-    padding: 80px 20px;
+    padding: 60px 20px;
     transform: scale(1.03);
     box-shadow: 0 8px 16px rgba(93, 90, 136, 0.2);
     margin: 5px 0;
