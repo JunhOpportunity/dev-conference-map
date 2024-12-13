@@ -100,7 +100,6 @@ export default function NavigationBar() {
     const handleLogout = () => {
         setIsLoggedIn(false);
         // TODO: 로그아웃 처리 로직 추가
-        navigate('/');
     };
 
     return (
@@ -124,7 +123,7 @@ export default function NavigationBar() {
             {isLoggedIn ? (
                 <LogoutButton onClick={handleLogout}>로그아웃</LogoutButton>
             ) : (
-                <LoginButton onClick={() => navigate("/login")}>로그인</LoginButton>
+                <LoginButton onClick={() => navigate("/signin")}>로그인</LoginButton>
             )}
             </ContainerElements>
         </Container>
