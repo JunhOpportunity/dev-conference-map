@@ -107,7 +107,7 @@ const SubmitButton = styled(Button)`
 
 export default function WritePost({ onClose }) {
   const dispatch = useDispatch();
-  const userId = useSelector(state => state.user.id);  
+  const userId = useSelector(state => state.user.id);  // userId -> id로 수정
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
 
@@ -115,7 +115,6 @@ export default function WritePost({ onClose }) {
     const newPost = {
       title: title,
       content: content,
-      created_at: new Date().toISOString().split('T')[0],
       userId: userId
     };
 

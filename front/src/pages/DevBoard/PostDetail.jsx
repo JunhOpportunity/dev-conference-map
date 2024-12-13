@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { COLORS } from "../../constants/colors";
 import { API_ENDPOINTS } from "../../apis/apiEndpoints";
-import { addComment } from "../../store/slices/userSlice";
 
 const MainContainer = styled.div`
   border: 1px solid ${COLORS.bg};
@@ -156,12 +155,11 @@ export default function PostDetail() {
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [commentInput, setCommentInput] = useState('');
-  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await fetch(API_ENDPOINTS.BOARDS.GET_ALL);
+        const response = await fetch("http://localhost:8081/api/comments/create");
         const data = await response.json();
         const selectedPost = data.find(post => post.id === parseInt(postId));  
         setPost(selectedPost);
@@ -181,11 +179,9 @@ export default function PostDetail() {
     if (!commentInput.trim()) return;
 
     const newComment = {
-      id: Date.now(), // 고유 ID 생성
-      postId: parseInt(postId),
+      post: {id: parseInt(postId)},
+      user : {id: user.id},
       content: commentInput,
-      name: user.name,
-      date: new Date().toISOString().split('T')[0]
     };
 
     try {
@@ -198,13 +194,10 @@ export default function PostDetail() {
       });
 
       if (response.ok) {
-        // Redux store에 댓글 추가
-        dispatch(addComment(newComment));
-        
-        // 현재 게시글의 댓글 목록 업데이트
+        const data = await response.json();
         setPost({
           ...post,
-          comments: [...post.comments, newComment]
+          comments: [...post.comments, data]
         });
         setCommentInput('');
       }
