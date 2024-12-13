@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import {COLORS} from "../../constants/colors";
 import {useNavigate, useLocation} from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../../store/slices/authSlice';
 
 const Container = styled.div`
     width: 100%;
@@ -95,12 +97,13 @@ const LogoutButton = styled(LoginButton)`
 export default function NavigationBar() {
     const navigate = useNavigate();
     const location = useLocation();
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const dispatch = useDispatch();
+    const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
+    const user = useSelector(state => state.user);
 
     const handleLogout = () => {
-        setIsLoggedIn(false);
-        // TODO: 로그아웃 처리 로직 추가
-        navigate('/');
+        dispatch(logout());
+        navigate(0);
     };
 
     return (
@@ -121,10 +124,10 @@ export default function NavigationBar() {
                     <div>마이 페이지</div>
                 </MenuButton>
             </MenuContainer>
-            {isLoggedIn ? (
+            {user.id ? (
                 <LogoutButton onClick={handleLogout}>로그아웃</LogoutButton>
             ) : (
-                <LoginButton onClick={() => navigate("/login")}>로그인</LoginButton>
+                <LoginButton onClick={() => navigate("/signin")}>로그인</LoginButton>
             )}
             </ContainerElements>
         </Container>

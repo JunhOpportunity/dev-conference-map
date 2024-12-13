@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { COLORS } from "../../constants/colors";
-
+import { API_ENDPOINTS } from "../../apis/apiEndpoints";
 
 const MainContainer = styled.div`
   border: 1px solid ${COLORS.bg};
@@ -20,6 +21,13 @@ const DetailContainer = styled.div`
 `;
 
 const PostHeader = styled.div`
+  margin-bottom: 20px;
+`;
+
+const InfoContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 const Title = styled.h1`
@@ -39,9 +47,14 @@ const Content = styled.div`
   border-radius:20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   min-height: 330px;
-
+  max-width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
   div {
     padding: 10px;
+    max-width: 100%;
+    white-space: pre-wrap;
+    overflow-x: hidden;
   }
 `;
 
@@ -138,6 +151,7 @@ const CommentInfo = styled.div`
 export default function PostDetail() {
   const { postId } = useParams();
   const navigate = useNavigate();
+  const user = useSelector(state => state.user);
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [commentInput, setCommentInput] = useState('');
@@ -145,10 +159,10 @@ export default function PostDetail() {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await fetch('/data/posts.json');
+        const response = await fetch(API_ENDPOINTS.BOARDS.GET_ALL);
         const data = await response.json();
-        const foundPost = data.find(p => p.id === parseInt(postId));
-        setPost(foundPost);
+        const selectedPost = data.find(post => post.id === parseInt(postId));  
+        setPost(selectedPost);
       } catch (error) {
         console.error('게시글 불러오는 데 실패했습니다. ', error);
       } finally {
@@ -159,33 +173,31 @@ export default function PostDetail() {
     fetchPost();
   }, [postId]);
 
+
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
     if (!commentInput.trim()) return;
 
     const newComment = {
-      name: "currentUser", // 실제 사용시 로그인된 사용자 정보 사용
-      nameId: Date.now(), // 임시 ID 생성
-      date: new Date().toISOString().slice(0, 16).replace('T', ' '),
-      content: commentInput
+      post: {id: parseInt(postId)},
+      user : {id: user.id},
+      content: commentInput,
     };
 
     try {
-      const response = await fetch('/data/posts.json', {
+      const response = await fetch("http://localhost:8081/api/comments/create", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          postId: parseInt(postId),
-          comment: newComment
-        }),
+        body: JSON.stringify(newComment),
       });
 
       if (response.ok) {
+        const data = await response.json();
         setPost({
           ...post,
-          comments: [...post.comments, newComment]
+          comments: [...post.comments, data]
         });
         setCommentInput('');
       }
@@ -204,9 +216,11 @@ export default function PostDetail() {
           <BackButton onClick={() => navigate('/dev-board')}>← 목록으로</BackButton>
           <PostHeader>
             <Title>{post.title}</Title>
-            <PostInfo>
-              작성자: {post.name} | 작성일: {post.date}
-            </PostInfo>
+            <InfoContainer>
+              <PostInfo>
+                작성자: {post.name} | 작성일: {post.date}
+              </PostInfo>
+            </InfoContainer>
           </PostHeader>
           <Content>
             <div>{post.content}</div>

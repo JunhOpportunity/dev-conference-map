@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
+import { useSelector } from "react-redux";
 
 const ModalBackdrop = styled.div`
   position: fixed;
@@ -108,9 +109,17 @@ const MapContainer = styled.div`
   background: #e9e9f5; /* 지도 로드 전 기본 배경 */
 `;
 
+function cleanOfflineData(input) {
+  return input.replace(/오프라인\s*\(.*\)/, ""), trim();
+}
+
 export default function ConferenceModal({ conference, onClose }) {
   const mapRef = useRef(null);
   const [isInWishlist, setIsInWishlist] = useState(false);
+  const user = useSelector((state) => state.user);
+
+  console.log("redux data",user);
+
 
   useEffect(() => {
     if (!window.naver || !window.naver.maps.Service) {
@@ -154,20 +163,9 @@ export default function ConferenceModal({ conference, onClose }) {
 
   const handleWishlistToggle = async () => {
     const newValue = !isInWishlist;
-
-    // 백엔드 API 요청 (예시, 실제 API 엔드포인트 수정 필요)
-    const response = await fetch("/api/wishlist", {
-      method: newValue ? "POST" : "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ conferenceId: conference.id }),
-    });
-
-    if (response.ok) {
-      setIsInWishlist(newValue);
-    } else {
-      console.error("Failed to update wishlist.");
-    }
   };
+
+  const email = "abc@naver.com";
 
   return (
     <ModalBackdrop onClick={onClose}>
@@ -175,13 +173,51 @@ export default function ConferenceModal({ conference, onClose }) {
         <CloseButton onClick={onClose}>&times;</CloseButton>
         <StarIcon
           isInWishlist={isInWishlist}
-          onClick={(e) => {
+          onClick={async (e) => {
             e.stopPropagation();
-            handleWishlistToggle();
+
+            try {
+              // 현재 상태 반전
+              const newWishlistStatus = !isInWishlist;
+              handleWishlistToggle();
+
+              // API 요청 데이터 생성
+              const payload = {
+                userId: user.id, // userId를 상태나 props로 전달
+                conferenceId: conference.id, // conferenceId를 상태나 props로 전달
+              };
+
+              console.log("위시리스트 추가 요청 데이터:", payload);
+
+              // API 호출
+              const response = await fetch(
+                "http://localhost:8081/api/wishlist/add",
+                {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(payload),
+                }
+              );
+
+              if (!response.ok) {
+                throw new Error("위시리스트 추가 요청 실패");
+              }
+
+              const data = await response.json();
+              console.log("위시리스트에 추가됨:", data);
+            } catch (error) {
+              console.error("위시리스트 추가 중 오류 발생:", error);
+
+              // 오류 발생 시 상태를 원래대로 복구
+              handleWishlistToggle();
+            }
           }}
         >
           {isInWishlist ? "★" : "☆"}
         </StarIcon>
+
         <Title>{conference.title}</Title>
         <Description>{conference.description}</Description>
         <InfoRow>
@@ -203,7 +239,12 @@ export default function ConferenceModal({ conference, onClose }) {
           </InfoColumn>
         </InfoRow>
         {/* 지도 컨테이너 */}
-        <MapContainer ref={mapRef}></MapContainer>
+        {conference.location == "온라인" ||
+        conference.location == "오프라인" ? (
+          <></>
+        ) : (
+          <MapContainer ref={mapRef}></MapContainer>
+        )}
       </ModalContent>
     </ModalBackdrop>
   );

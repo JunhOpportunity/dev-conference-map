@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
+import { useSelector, useDispatch } from "react-redux";
+import { addUser } from "../../store/slices/userSlice"; // Redux 액션 가져오기
 
 const PageContainer = styled.div`
   padding: 20px;
@@ -149,7 +151,7 @@ const PostItem = styled.div`
 const IconContainer = styled.div`
   display: flex;
   justify-content: center;
-`
+`;
 
 const IconButton = styled.button`
   background: none;
@@ -159,88 +161,44 @@ const IconButton = styled.button`
   cursor: pointer;
 `;
 
-// Main Component
 export default function MyPage() {
-  const user = {
-    id: 1,
-    name: "김준호",
-    email: "example@email.com",
-    socialLogin: "Google",
-    socialEmail: "example@gmail.com",
-    interest: ["프론트엔드", "백엔드", "디자인"],
-    wishlist: [
-      {
-        id: 1,
-        title: "우아한형제들 기술이사 김민태의 데브캠프",
-        category: ["온라인", "유료", "프론트엔드"],
-        organizer: "패스트캠퍼스",
-        location: "서울특별시 강남구 영동대로 513",
-        registration_period: {
-          start_date: "2024-10-23",
-          end_date: "2024-12-01",
-        },
-        description:
-          "우아한형제들 기술이사가 전하는 프론트엔드 최신 트렌드와 실전 경험을 공유합니다.",
-        website: "https://fastcampus.co.kr/devcamp2024",
-      },
-      {
-        id: 2,
-        title: "경기도 판교 Next.js 실전 컨퍼런스",
-        category: ["오프라인", "유료", "풀스택"],
-        organizer: "Next Academy",
-        location: "경기도 판교",
-        registration_period: {
-          start_date: "2024-11-15",
-          end_date: "2024-12-10",
-        },
-        description:
-          "Next.js 기반의 풀스택 개발을 실전에서 활용하기 위한 노하우를 공유하는 컨퍼런스.",
-        website: "https://nextacademy.io/conference",
-      },
-      {
-        id: 3,
-        title: "우아한형제들 기술이사 김민태의 데브캠프",
-        category: ["온라인", "유료", "프론트엔드"],
-        organizer: "패스트캠퍼스",
-        location: "서울특별시 강남구 영동대로 513",
-        registration_period: {
-          start_date: "2024-10-23",
-          end_date: "2024-12-01",
-        },
-        description:
-          "우아한형제들 기술이사가 전하는 프론트엔드 최신 트렌드와 실전 경험을 공유합니다.",
-        website: "https://fastcampus.co.kr/devcamp2024",
-      },
-      {
-        id: 4,
-        title: "경기도 판교 Next.js 실전 컨퍼런스",
-        category: ["오프라인", "유료", "풀스택"],
-        organizer: "Next Academy",
-        location: "경기도 판교",
-        registration_period: {
-          start_date: "2024-11-15",
-          end_date: "2024-12-10",
-        },
-        description:
-          "Next.js 기반의 풀스택 개발을 실전에서 활용하기 위한 노하우를 공유하는 컨퍼런스.",
-        website: "https://nextacademy.io/conference",
-      },
-    ],
-    posts: [
-      {
-        id: 101,
-        title: "FECONF2024 티켓 양도합니다",
-        created_at: "2024-11-21",
-      },
-      {
-        id: 102,
-        title: "TEO CONF 같이 가실 분 구합니다",
-        created_at: "2024-11-15",
-      },
-    ],
-  };
+  const user = useSelector((state) => state.user);
+  console.log("마이페이지",user)
+  const dispatch = useDispatch();
+  const userId = user.id; // Redux 상태에서 사용자 ID 가져오기
 
-  // 게시글 삭제 함수
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch(`http://localhost:8081/api/users/get/${userId}`);
+        if (!response.ok) {
+          throw new Error("사용자 정보를 가져오지 못했습니다.");
+        }
+        const userData = await response.json();
+
+        const interestArray = userData.interest.split(", ").map(item => item.trim())
+
+        // Redux 상태 업데이트
+        dispatch(
+          addUser({
+            id: userData.id,
+            name: userData.name,
+            email: userData.email,
+            interest: interestArray,
+            wishlist: userData.wishlist,
+            posts: userData.posts,
+          })
+        );
+      } catch (error) {
+        console.error("사용자 정보 요청 중 오류:", error);
+      }
+    };
+
+    if (userId) {
+      fetchUserData();
+    }
+  }, [userId, dispatch]);
+
   const handleDeletePost = async (postId) => {
     try {
       const response = await fetch(`/api/posts/${postId}`, {
@@ -251,11 +209,13 @@ export default function MyPage() {
       });
 
       if (response.ok) {
-        // 서버 요청 성공 시, UI에서 해당 게시글 제거
-        setUser((prevState) => ({
-          ...prevState,
-          posts: prevState.posts.filter((post) => post.id !== postId),
-        }));
+        // 삭제 후 상태 업데이트 (삭제된 게시물 제거)
+        dispatch(
+          addUser({
+            ...user,
+            posts: user.posts.filter((post) => post.id !== postId),
+          })
+        );
       } else {
         console.error("Failed to delete post");
       }
@@ -272,15 +232,6 @@ export default function MyPage() {
           <InputContainer>
             <Label>유저명</Label>
             <ReadOnlyInput>{user.name}</ReadOnlyInput>
-          </InputContainer>
-          <InputContainer>
-            <Label>소셜 로그인</Label>
-            <ReadOnlyInput>
-              <span role="img" aria-label="Google">
-                🌐
-              </span>{" "}
-              {user.socialEmail}
-            </ReadOnlyInput>
           </InputContainer>
           <InputContainer>
             <Label>이메일</Label>
@@ -301,9 +252,9 @@ export default function MyPage() {
             {user.wishlist.map((item, index) => (
               <WishlistItem key={index}>
                 <WishlistItemInfo>
-                  <h3>{item.title}</h3>
-                  <p>{item.registration_period.start_date}</p>
-                  <LearnMore href={item.website}>Learn more →</LearnMore>
+                  <h3>{item.confName}</h3>
+                  <p>{item.date}</p>
+                  {/* <LearnMore href={item.website}>Learn more →</LearnMore> */}
                 </WishlistItemInfo>
               </WishlistItem>
             ))}

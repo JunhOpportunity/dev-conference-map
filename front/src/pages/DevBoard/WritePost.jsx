@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { COLORS } from '../../constants/colors';
+import { API_ENDPOINTS } from '../../apis/apiEndpoints';
+import { addPost } from '../../store/slices/userSlice';
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -103,22 +106,20 @@ const SubmitButton = styled(Button)`
 `;
 
 export default function WritePost({ onClose }) {
+  const dispatch = useDispatch();
+  const userId = useSelector(state => state.user.id);  // userId -> id로 수정
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
 
   const handleSubmit = async () => {
     const newPost = {
-      id: Date.now(), // 임시 ID 생성
       title: title,
-      name: "Anonymous", // 임시 사용자 이름
-      date: new Date().toISOString().slice(0, 16).replace('T', ' '),
       content: content,
-      likes: 0,
-      comments: []
+      userId: userId
     };
 
     try {
-      const response = await fetch('/data/posts.json', {
+      const response = await fetch(API_ENDPOINTS.BOARDS.CREATE, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -129,6 +130,8 @@ export default function WritePost({ onClose }) {
       if (!response.ok) {
         throw new Error('게시글 등록에 실패했습니다.');
       }
+
+      dispatch(addPost({ userId: userId, post: newPost }));
       onClose();
     } catch (error) {
       console.error('Error:', error);
