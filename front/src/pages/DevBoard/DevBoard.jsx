@@ -3,7 +3,8 @@ import styled from "styled-components";
 import { COLORS } from "../../constants/colors";
 import WritePost from "./WritePost";
 import { useNavigate } from "react-router-dom";
-
+import { API_ENDPOINTS } from "../../apis/apiEndpoints";
+import { useSelector, useDispatch } from "react-redux";
 
 const BoardContainer = styled.div`
   display: flex;
@@ -39,10 +40,34 @@ const PostItem = styled.div`
 
   &:hover {
     background-color: ${COLORS.bg};
-    padding: 80px 20px;
+    padding: 60px 20px;
     transform: scale(1.03);
     box-shadow: 0 8px 16px rgba(93, 90, 136, 0.2);
     margin: 5px 0;
+    font-size: 0px;
+  }
+
+  .post-preview {
+    height: 0;
+    opacity: 0;
+    transition: all 0.4s ease;
+    color: #666;
+    font-size: 0px;
+    margin-top: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  &:hover .post-preview {
+    height: auto;
+    opacity: 1;
+    margin-top: 15px;
+    font-size: 18px;
+    max-height: 50%;
+    max-width: 90%;
   }
 `;
 
@@ -96,9 +121,24 @@ const PostTitle = styled.h3`
   color: ${COLORS.sig};
 `;
 
+const HeartIcon = styled.span`
+  color: ${COLORS.sig};
+  font-size: 1.1em;
+`;
+
 const PostInfo = styled.p`
   margin: 0;
   color: ${COLORS.sig};
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  .likes {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    font-weight: bold;
+  }
 `;
 
 const PaginationWrapper = styled.div`
@@ -134,6 +174,9 @@ const PageButton = styled.button`
 `;
 
 export default function DevBoard() {
+  const dispatch = useDispatch();
+  const user = useSelector(state => state.user);
+  const userPosts = useSelector(state => state.user.posts);
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [sortOrder, setSortOrder] = useState('desc');
@@ -144,16 +187,16 @@ export default function DevBoard() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await fetch('/data/posts.json');
+        const response = await fetch(API_ENDPOINTS.BOARDS.GET_ALL);
         const data = await response.json();
-        setPosts(data);
+        setPosts([...data, ...userPosts]); // Redux store의 posts와 서버 데이터 병합
       } catch (error) {
         console.error('게시글을 불러오는데 실패했습니다:', error);
       }
     };
 
     fetchPosts();
-  }, []);
+  }, [userPosts]);
 
   // 정렬된 게시글 목록 생성
   const sortedPosts = [...posts].sort((a, b) => {
@@ -191,7 +234,17 @@ export default function DevBoard() {
             <PostItem key={post.id} onClick={() => handlePostClick(post.id)}>
               <PostContent>
                 <PostTitle>{post.title}</PostTitle>
-                <PostInfo> {post.name} | {post.date}</PostInfo>
+                <div className="post-preview">
+                  {post.content.length > 100 
+                    ? `${post.content.substring(0, 100)}...` 
+                    : post.content}
+                </div>
+                <PostInfo>
+                  <span>{post.name} | {post.date}</span>
+                  <span className="likes">
+                    <HeartIcon>♥</HeartIcon> {post.likes || 0}
+                  </span>
+                </PostInfo>
               </PostContent>
             </PostItem>
           ))}
