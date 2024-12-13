@@ -32,6 +32,7 @@ const initialState = {
       created_at: "2024-12-10",
     },
   ],
+  comments: [], // 댓글 추가
 };
 
 const userSlice = createSlice({
@@ -55,8 +56,11 @@ const userSlice = createSlice({
         user.posts.push(post);
       }
     },
+    addComment: (state, action) => {    //댓글 추가
+      state.comments.push(action.payload);
+    },
   },
 });
 
-export const { addUser, updateWishlist, addPost } = userSlice.actions;
+export const { addUser, updateWishlist, addPost, addComment } = userSlice.actions;
 export default userSlice.reducer;
