@@ -11,7 +11,7 @@ MAP API를 활용해 국내 개발자 컨퍼런스를 확인할 수 있는 웹 �
 ### 백엔드
 - maria DB
 - java 17
-- spring boot 3.3.6]
+- spring boot 3.3.6
 
 ### Git branch 전략
 ![image](https://github.com/user-attachments/assets/3fc64d09-eddc-46b0-917e-d2c831131626)
