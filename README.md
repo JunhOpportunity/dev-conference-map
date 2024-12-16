@@ -3,15 +3,15 @@ MAP API를 활용해 국내 개발자 컨퍼런스를 확인할 수 있는 웹 �
 
 ## 개발 인원
 ### 프론트엔드
-[팀장] 김준호 - https://github.com/JunhOpportunity
-[팀원] 권정욱 - https://github.com/wookgom
-[팀원] 김은시 - https://github.com/Eun-si-Kim
-[팀원] 오다영
+- [팀장] 김준호 - https://github.com/JunhOpportunity
+- [팀원] 권정욱 - https://github.com/wookgom
+- [팀원] 김은시 - https://github.com/Eun-si-Kim
+- [팀원] 오다영
 ### 백엔드
-[팀원] 박주현 - https://github.com/JH031
-[팀원] 김민경 - https://github.com/August2821
+- [팀원] 박주현 - https://github.com/JH031
+- [팀원] 김민경 - https://github.com/August2821
 ### 디자인
-[팀원] 김은시 - https://github.com/Eun-si-Kim
+- [팀원] 김은시 - https://github.com/Eun-si-Kim
 
 ## 개발 환경
 ### 공통
