@@ -25,6 +25,6 @@ MAP API를 활용해 국내 개발자 컨퍼런스를 확인할 수 있는 웹 �
 ### Notion
 https://junhopportunity.notion.site/13caa613e8f58005a808f9da887bc86d?pvs=4
 ![image](https://github.com/user-attachments/assets/1c216409-dd3b-4501-9956-6415d3560aaf)
-### Figam
+### Figma
 https://www.figma.com/design/20YQP6SyLQe4NVGJf1x0Ss/opsc-dev-conf?node-id=0-1&p=f&t=Z4YvzfqYpwyk9rvc-0
 ![image](https://github.com/user-attachments/assets/cfc27cbd-efff-4fae-8b88-09e35bd75fd5)
