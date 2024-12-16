@@ -161,10 +161,18 @@ export default function PostDetail() {
       try {
         const response = await fetch(API_ENDPOINTS.BOARDS.GET_ALL);
         const data = await response.json();
-        const selectedPost = data.find(post => post.id === parseInt(postId));  
+        const selectedPost = data.find(post => post.id === parseInt(postId));
         setPost(selectedPost);
       } catch (error) {
-        console.error('게시글 불러오는 데 실패했습니다. ', error);
+        console.error('API에서 게시글을 불러오는데 실패했습니다. 로컬 데이터를 불러옵니다:', error);
+        try {
+          const response = await fetch('/data/posts.json');
+          const data = await response.json();
+          const selectedPost = data.find(post => post.id === parseInt(postId));
+          setPost(selectedPost);
+        } catch (localError) {
+          console.error('로컬 데이터 불러오기도 실패했습니다:', localError);
+        }
       } finally {
         setLoading(false);
       }
@@ -202,7 +210,20 @@ export default function PostDetail() {
         setCommentInput('');
       }
     } catch (error) {
-      console.error('댓글 등록 실패:', error);
+      console.error('댓글 등록 API 호출 실패. 로컬에 댓글을 추가합니다:', error);
+      // 로컬에서 댓글 추가
+      const localComment = {
+        nameId: Date.now(), // 임시 ID 생성
+        name: user.name || "사용자",
+        date: new Date().toLocaleString(),
+        content: commentInput
+      };
+      
+      setPost({
+        ...post,
+        comments: [...post.comments, localComment]
+      });
+      setCommentInput('');
     }
   };
 

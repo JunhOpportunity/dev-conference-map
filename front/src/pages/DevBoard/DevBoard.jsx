@@ -177,9 +177,17 @@ export default function DevBoard() {
       try {
         const response = await fetch(API_ENDPOINTS.BOARDS.GET_ALL);
         const data = await response.json();
-        setPosts([...data, ...userPosts]); // Redux store의 posts와 서버 데이터 병합
+        setPosts([...data, ...userPosts]);
       } catch (error) {
-        console.error('게시글을 불러오는데 실패했습니다:', error);
+        console.error('API에서 게시글을 불러오는데 실패했습니다. 로컬 데이터를 불러옵니다:', error);
+        try {
+          const response = await fetch('/data/posts.json');
+          const data = await response.json();
+          setPosts([...data, ...userPosts]);
+        } catch (localError) {
+          console.error('로컬 데이터 불러오기도 실패했습니다:', localError);
+          setPosts([...userPosts]);
+        }
       }
     };
 
