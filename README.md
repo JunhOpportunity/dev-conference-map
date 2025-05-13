@@ -1,6 +1,7 @@
 # dev-conference-map
 MAP API를 활용해 국내 개발자 컨퍼런스를 확인할 수 있는 웹 프로젝트
-
+## 개발 기간
+2024-09-01 ~ 2024-12-19
 ## 개발 인원
 ### 프론트엔드
 - [팀장] 김준호 - https://github.com/JunhOpportunity
